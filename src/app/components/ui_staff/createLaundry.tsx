@@ -2,7 +2,7 @@ import { PlusCircleFilled } from '@ant-design/icons'
 import { PrimaryButton } from '../button/buttons'
 import { useState } from 'react'
 import { CustomFormModal } from '../modal/modal'
-import { Form } from 'antd'
+import { Form, notification } from 'antd'
 import { FormInput, InputNumberFix } from '../input/inputs'
 import { DefaultForm } from '../form/form'
 import { CreateLaundry } from '~/app/models/laundry'
@@ -22,9 +22,19 @@ export default function CreateLaundryModal({ onUpdateLaundryPacks } : any) {
     try {
       const response = await createLaundryPack(values);
       console.log('Laundry pack created:', response);
+      notification.success({
+        message: 'Laundry pack created successfully',
+        description: 'The new laundry pack has been created.',
+        type: 'success',
+      });
       setOpen(false);
       onUpdateLaundryPacks();
     } catch (error) {
+      notification.error({
+        message: 'Laundry pack created unsuccessfully',
+        description: `${error}`,
+        type: 'error',
+      });
       console.error('Error creating laundry pack:', error);
     }
     finally{

@@ -41,12 +41,16 @@ export const user: User[] = [
 
 export const roleOptions = [
   {
-    value: 'admin',
+    value: 'Admin',
     label: 'Admin'
   },
   {
-    value: 'staff',
+    value: 'Staff',
     label: 'Staff'
+  },
+  {
+    value: 'Customer',
+    label: 'Customer'
   },
 ]
 

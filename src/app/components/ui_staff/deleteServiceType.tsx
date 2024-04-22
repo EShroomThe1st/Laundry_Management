@@ -4,6 +4,7 @@ import { DeleteModal } from '../modal/modal'
 import { useState } from 'react'
 import { deleteServiceType } from '~/app/utils/api'
 import { ServiceType } from '~/app/models/service'
+import { notification } from 'antd'
 
 export default function DeleteServiceType({
   record,
@@ -21,9 +22,19 @@ export default function DeleteServiceType({
       const body = { service_type_id: record.service_type_id };
       await deleteServiceType(body)
       console.log('Service type deleted successfully')
+      notification.success({
+        message: 'Service type deleted successfully',
+        description: 'The service type type has been deleted.',
+        type: 'success',
+      });
       setOpen(false)
       onUpdateServiceType()
     } catch (error) {
+      notification.error({
+        message: 'Service type deleted unsuccessfully',
+        description: `${error}`,
+        type: 'error',
+      });
       console.error('Error deleting service type:', error)
     }
     finally{

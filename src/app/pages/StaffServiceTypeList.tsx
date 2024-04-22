@@ -4,6 +4,7 @@ import { Table, TableProps } from "antd";
 import { ServiceType } from "../models/service";
 import CreateNewServiceType from "../components/ui_staff/createServiceType";
 import DeleteServiceType from "../components/ui_staff/deleteServiceType";
+import ViewServiceType from "../components/ui_staff/viewService";
 
 export default function StaffServicetTypeList(){
   const [serviceType, setServiceType] = useState<ServiceType[]>([]);
@@ -37,10 +38,8 @@ export default function StaffServicetTypeList(){
     },
     {
       title: "View Services",
-      render: () => (
-        <>
-
-        </>
+      render: (_,record) => (
+        <ViewServiceType record={record}/>
       )
     },
     {

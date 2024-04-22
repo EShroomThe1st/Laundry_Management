@@ -1,7 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../redux/hook";
-import { translateRole, translateRoleFromNonsense } from "../utils/generators";
-// import Forbidden from "../pages/ForbiddenPage";
+import { translateRoleFromNonsense } from "../utils/generators";
 
 interface PrivateRouteProps {
   inverted: boolean;
@@ -29,11 +27,12 @@ const PrivateRoute = ({
           return <Navigate to="/" />;
       }
     } else {
+      console.log("Role?", role)
       return children;
     }
   }
 
-  // if (role && !requiredRoles?.some((r) => role === r)) return <ErrorPage />;
+  if (role && !requiredRoles?.some((r) => role === r)) return <Navigate to="/" />;
 
   return isAuth ? children : <Navigate to="/login" />;
 };

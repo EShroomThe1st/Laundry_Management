@@ -4,6 +4,7 @@ import { DeleteModal } from '../modal/modal'
 import { useState } from 'react'
 import { Laundry } from '~/app/models/laundry'
 import { deleteLaundryPack } from '~/app/utils/api'
+import { notification } from 'antd'
 
 export default function DeleteLaundry({
   record,
@@ -21,9 +22,19 @@ export default function DeleteLaundry({
       const body = { laundry_pack_id: record.laundry_pack_id };
       await deleteLaundryPack(body)
       console.log('Laundry pack deleted successfully')
+      notification.success({
+        message: 'Laundry pack deleted successfully',
+        description: 'The laundry pack type has been deleted.',
+        type: 'success',
+      });
       setOpen(false)
       onUpdateLaundryPacks()
     } catch (error) {
+      notification.error({
+        message: 'Laundry pack deleted unsuccessfully',
+        description: `${error}`,
+        type: 'error',
+      });
       console.error('Error deleting laundry pack:', error)
     }
     finally{

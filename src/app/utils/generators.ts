@@ -29,6 +29,6 @@ export function translateRoleFromNonsense(role: string | null) {
     case 'culi':
       return 'Staff';
     default:
-      return 'Unknown Role';
+      return null;
   }
 }

@@ -43,8 +43,8 @@ export default function StaffLaundryPackList(){
       render: (laundry_pack_price) => formatCurrency(laundry_pack_price)
     },
     {
-      title: 'Actions',
-      key: 'actions',
+      title: 'Delete',
+      key: 'delete',
       render: (_, record) => (
         <>
           <DeleteLaundry record={record} onUpdateLaundryPacks={updateLaundryPacks}/>

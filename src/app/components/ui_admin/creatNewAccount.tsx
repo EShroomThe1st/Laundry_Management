@@ -2,7 +2,7 @@ import { PlusCircleFilled } from '@ant-design/icons'
 import { PrimaryButton } from '../button/buttons'
 import { useState } from 'react'
 import { CustomFormModal } from '../modal/modal'
-import { Col, Form, Row } from 'antd'
+import { Col, Form, Row, notification } from 'antd'
 import { FormInput, FormInputPassword, FormRadioGroup } from '../input/inputs'
 import { roleOptions } from '~/constants/testData'
 import { DefaultForm } from '../form/form'
@@ -13,6 +13,7 @@ export default function CreateNewAccount({onUpdateUser} : {onUpdateUser : any}) 
   const [open, setOpen] = useState(false)
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState(false);
+
 
   const handleCancel = () => {
     setOpen(false)
@@ -40,10 +41,20 @@ export default function CreateNewAccount({onUpdateUser} : {onUpdateUser : any}) 
         role_name,
       });
       console.log('Account created:', response);
+      notification.success({
+        message: 'Account created successfully',
+        description: 'The new account has been created.',
+        type: 'success',
+      });
+
       setOpen(false);
       onUpdateUser();
     } catch (error) {
-      console.error('Error creating account:', error);
+      notification.error({
+        message: 'Account created unsuccessfully',
+        description: `${error}`,
+        type: 'error',
+      });
     }
     finally{
       setIsLoading(false)
@@ -69,7 +80,7 @@ export default function CreateNewAccount({onUpdateUser} : {onUpdateUser : any}) 
             fontSize: '1.5rem'
           }}
         />{' '}
-        Create New Staff Account
+        Create New Account
       </PrimaryButton>
       <CustomFormModal
         open={open}

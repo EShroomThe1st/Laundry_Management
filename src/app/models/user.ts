@@ -8,7 +8,8 @@ export interface User{
   phone_number: string,
   last_update: string,
   is_active: boolean,
-  role_id: string
+  role_id: string,
+  role_name?: string,
 }
 
 export interface CreateUser{

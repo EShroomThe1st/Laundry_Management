@@ -3,7 +3,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { Envs } from './env'
 import { CreateLaundry } from '../models/laundry'
-import { CreateUser } from '../models/user'
+import { CreateUser, User } from '../models/user'
 import { CreateServiceType } from '../models/service'
 
 const baseURL = Envs.apiLocal
@@ -43,6 +43,18 @@ const getAllServiceType = async () => {
     throw error
   }
 }
+
+const getAllService = async (data: object) => {
+  try {
+    NProgress.start();
+    const response = await axios.get(`${baseURL}/laundry/service-type`, data );
+    NProgress.done();
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching service data:', error);
+    throw error;
+  }
+};
 
 const createLaundryPack = async (data: CreateLaundry) => {
   try {
@@ -85,6 +97,18 @@ const createNewServiceType = async (data: CreateServiceType) => {
   }
 }
 
+const updateAccount = async (data: User) => {
+  try {
+    NProgress.start()
+    const response = await axios.patch(`${baseURL}/user/account`, data)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error updating account:', error)
+    throw error
+  }
+}
+
 const deleteLaundryPack = async (data: Object) => {
   try {
     NProgress.start()
@@ -117,5 +141,7 @@ export {
   createNewAccount,
   getAllServiceType,
   createNewServiceType,
-  deleteServiceType
+  deleteServiceType,
+  updateAccount,
+  getAllService
 }

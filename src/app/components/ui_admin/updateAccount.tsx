@@ -2,23 +2,46 @@ import { EditOutlined } from '@ant-design/icons'
 import { IconButton } from '../button/buttons'
 import { useState } from 'react'
 import { CustomFormModal } from '../modal/modal'
-import { Col, Form, Row } from 'antd'
-import { FormInput, FormRadioGroup, InputNumberFix, SwitchInput } from '../input/inputs'
+import { Col, Form, Row, notification } from 'antd'
+import { FormInput, FormRadioGroup, SwitchInput } from '../input/inputs'
 import { roleOptions } from '~/constants/testData'
 import { User } from '~/app/models/user'
 import { DefaultForm } from '../form/form'
+import { updateAccount } from '~/app/utils/api'
 
-export default function UpdateAccount({record}: {record : User}) {
+export default function UpdateAccount({record, onUpdateUser} : {record : any, onUpdateUser : any}) {
   const [open, setOpen] = useState(false)
   const [form] = Form.useForm()
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleCancel = () => {
     setOpen(false)
   }
 
   const handleSubmit = async (values: any) => {
-    console.log('Received values of form: ', values)
-    setOpen(false)
+    setIsLoading(true)
+    try {
+      const response = await updateAccount({...values, user_id: record.user_id});
+      console.log('Update account:', response);
+      notification.success({
+        message: 'Account updated successfully',
+        description: 'The account has been updated.',
+        type: 'success',
+      });
+      setOpen(false);
+      onUpdateUser();
+    } catch (error) {
+      notification.error({
+        message: 'Account updated unsuccessfully',
+        description: `${error}`,
+        type: 'error',
+      });
+      console.error('Error updating account:', error);
+    }
+    finally{
+      setIsLoading(false)
+    }
   }
 
   const handleIconClick = (record : User) => {
@@ -37,6 +60,7 @@ export default function UpdateAccount({record}: {record : User}) {
       <CustomFormModal
         open={open}
         title='Update Account'
+        confirmLoading={isLoading}
         onCancel={() => {
           handleCancel()
           form.resetFields()
@@ -103,27 +127,27 @@ export default function UpdateAccount({record}: {record : User}) {
           label='Phone Number'
           rules={[
             {
-              required: true
+              required: true,
+              type: "string",
+              pattern: /^[0-9]+$/,
+              len: 10,
+              message: "Phone number is invalid",
+              whitespace: true,
             }
           ]}
         >
-          <InputNumberFix />
+          <FormInput />
         </Form.Item>
         <Form.Item
           name='address'
           label='Address'
-          rules={[
-            {
-              required: true
-            }
-          ]}
         >
           <FormInput />
         </Form.Item>
         <Row>
           <Col span={5}>
             <Form.Item
-              name='role_id'
+              name='role_name'
               label='Role'
               rules={[
                 {

@@ -14,7 +14,11 @@ export default function AdminUsersList() {
     try {
       const response = await getAllUser()
       if (response.success) {
-        setUsers(response.data)
+        setUsers(response.data.map((user : User)=>(
+          {...user,
+          role_name: translateRole(user.role_id)
+          }
+        )))
       } else {
         console.error('Error fetching users data:', response)
       }
@@ -51,13 +55,20 @@ export default function AdminUsersList() {
     {
       title: 'Address',
       dataIndex: 'address',
-      key: 'address'
-    },
+      key: 'address',
+      render: (address: string | null) =>
+        address ? (
+          address 
+        ) : (
+          <div className='font-bold text-[1.5rem]'>
+            -
+          </div>
+        )
+    },     
     {
       title: 'Role',
-      dataIndex: 'role_id',
-      key: 'role_id',
-      render: (roleId: string) => translateRole(roleId),
+      dataIndex: 'role_name',
+      key: 'role_name',
     },
     {
       title: 'Status',
@@ -71,11 +82,11 @@ export default function AdminUsersList() {
         )
     },
     {
-      title: 'Actions',
-      key: 'actions',
+      title: 'Update',
+      key: 'update',
       render: (_, record) => (
         <>
-          <UpdateAccount record={record} />
+          <UpdateAccount record={record} onUpdateUser={onUpdateUser}/>
         </>
       )
     }

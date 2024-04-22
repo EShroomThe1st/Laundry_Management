@@ -2,7 +2,7 @@ import { PlusCircleFilled } from '@ant-design/icons'
 import { PrimaryButton } from '../button/buttons'
 import { useState } from 'react'
 import { CustomFormModal } from '../modal/modal'
-import { Form } from 'antd'
+import { Form, notification } from 'antd'
 import { FormInput } from '../input/inputs'
 import { DefaultForm } from '../form/form'
 import { createNewServiceType } from '~/app/utils/api'
@@ -24,9 +24,19 @@ export default function CreateNewServiceType({ onUpdateServiceType } : any) {
       const response = await createNewServiceType(values);
       console.log('Service type created:', response);
       setOpen(false);
+      notification.success({
+        message: 'Service type created successfully',
+        description: 'The new service type has been created.',
+        type: 'success',
+      });
       onUpdateServiceType();
     } catch (error) {
       console.error('Error creating service type:', error);
+      notification.error({
+        message: 'Service type created unsuccessfully',
+        description: `${error}`,
+        type: 'error',
+      });
     } finally {
       setIsLoading(false); 
     }

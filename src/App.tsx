@@ -5,7 +5,9 @@ import { validateMessages } from "./app/utils/validate-messages";
 
 function AppWrapper() {
 
+
   return (
+    <>
     <ConfigProvider
     form={{ validateMessages }}
   >
@@ -13,6 +15,7 @@ function AppWrapper() {
       <RouterProvider router={router} />
     </App>
     </ConfigProvider>
+    </>
   )
 }
 

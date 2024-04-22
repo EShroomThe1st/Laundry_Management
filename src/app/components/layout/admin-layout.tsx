@@ -1,5 +1,5 @@
 import Content from '../ui/content'
-import AdminHeader from '../ui_admin/header'
+import AdminHeader from '../ui/header'
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   return <>
