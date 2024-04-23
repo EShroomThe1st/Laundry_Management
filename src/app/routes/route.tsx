@@ -16,6 +16,7 @@ const AdminUsersList = lazy(() => import('../pages/AdminUsersList'))
 //staff
 const StaffLaundryPackList = lazy(() => import('../pages/StaffLaundryPackList'))
 const StaffServicetTypeList = lazy(() => import('../pages/StaffServiceTypeList'))
+const StaffOrderList = lazy(() => import('../pages/StaffOrdersList'))
 
 const PrivateRoute = lazy(() => import('./proute'))
 
@@ -111,6 +112,14 @@ export const router = createBrowserRouter([
             element: (
               <Suspense fallback={<></>}>
                 <StaffServicetTypeList />
+              </Suspense>
+            )
+          },
+          {
+            path: 'order',
+            element: (
+              <Suspense fallback={<></>}>
+                <StaffOrderList/>
               </Suspense>
             )
           }

@@ -1,4 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteFilled } from '@ant-design/icons'
 import { IconButton } from '../button/buttons'
 import { DeleteModal } from '../modal/modal'
 import { useState } from 'react'
@@ -47,7 +47,7 @@ export default function DeleteServiceType({
 
   return (
     <>
-      <IconButton icon={<DeleteOutlined />} onClick={() => setOpen(true)} />
+      <IconButton icon={<DeleteFilled />} onClick={() => setOpen(true)} />
       <DeleteModal
         title={`Delete ${record.service_type_name}?`}
         open={open}

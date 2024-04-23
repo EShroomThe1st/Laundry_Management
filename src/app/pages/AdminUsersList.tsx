@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Key } from 'react'
 import { Table, TableProps } from 'antd'
 import { getAllUser } from '../utils/api'
 import { User } from '../models/user'
 import CreateNewAccount from '../components/ui_admin/creatNewAccount'
-import UpdateAccount from '../components/ui_admin/updateAccount'
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
 import { translateRole } from '../utils/generators'
+import { CustomDropdown, CustomDropdownProps } from '../components/ui_admin/dropDown'
 
 export default function AdminUsersList() {
   const [users, setUsers] = useState<User[]>([])
@@ -34,6 +34,32 @@ export default function AdminUsersList() {
   useEffect(() => {
     getUsersData()
   }, [])
+
+  const dropdownItems: CustomDropdownProps["items"] = [
+    {
+      key: "update",
+      label: "Update Account",
+    },
+    {
+      key: "disable",
+      label: "Disable Account",
+      danger: true
+    },
+  ];
+
+  const checkDisabled = (
+    key: Key | undefined,
+    record: User,
+  ): boolean => {
+    const { is_active } = record;
+    switch (key) {
+      case "disable":
+        return !is_active;
+      default:
+        return false;
+    }
+  };
+  
 
   const columns: TableProps<User>['columns'] = [
     {
@@ -82,14 +108,24 @@ export default function AdminUsersList() {
         )
     },
     {
-      title: 'Update',
-      key: 'update',
+      title: 'Actions',
+      key: 'actions',
+      align: "center",
       render: (_, record) => (
         <>
-          <UpdateAccount record={record} onUpdateUser={onUpdateUser}/>
+          <CustomDropdown items={dropdownItems} checkDisabled={checkDisabled} record={record} onUpdateUser={onUpdateUser}/>
         </>
       )
     }
+        // {
+    //   title: 'Update',
+    //   key: 'update',
+    //   render: (_, record) => (
+    //     <>
+    //       <UpdateAccount record={record} onUpdateUser={onUpdateUser}/>
+    //     </>
+    //   )
+    // }
   ]
 
   return (

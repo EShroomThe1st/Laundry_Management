@@ -38,12 +38,13 @@ export default function StaffServicetTypeList(){
     },
     {
       title: "View Services",
+      align:"center",
       render: (_,record) => (
         <ViewServiceType record={record}/>
       )
     },
     {
-      title: "Delete Service Type",
+      title: "Delete",
       align: "center",
       render: (_, record) => (<DeleteServiceType record={record} onUpdateServiceType={updateServiceType}/>)
 

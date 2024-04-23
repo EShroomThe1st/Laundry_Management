@@ -23,12 +23,17 @@ export default function Header(){
       label,
     };
   }
+
+  const handleLogout = () => {
+    localStorage.clear(),
+    navigate('/login')
+  }
   
   const getConditionalItems = (): ItemType[] => {
     switch (role) {
       case "Staff":
         return [
-          getItem("Order", "/"),
+          getItem("Order", "/staff/order"),
           getItem("Service", "/staff/service"),
           getItem("Laundry Packs", "/staff/laundry"),
         ];
@@ -58,7 +63,7 @@ export default function Header(){
       />
         </div>
       </div>
-      <PrimaryButton>
+      <PrimaryButton onClick={handleLogout}>
         Log Out
       </PrimaryButton>
     </div>

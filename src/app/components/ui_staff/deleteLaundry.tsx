@@ -1,4 +1,4 @@
-import { DeleteOutlined } from '@ant-design/icons'
+import { DeleteFilled } from '@ant-design/icons'
 import { IconButton } from '../button/buttons'
 import { DeleteModal } from '../modal/modal'
 import { useState } from 'react'
@@ -52,7 +52,7 @@ export default function DeleteLaundry({
 
   return (
     <>
-      <IconButton icon={<DeleteOutlined />} onClick={() => handleIconClick(record)} />
+      <IconButton icon={<DeleteFilled />} onClick={() => handleIconClick(record)} />
       <DeleteModal
         title={`Delete ${record.laundry_pack_name}?`}
         open={open}

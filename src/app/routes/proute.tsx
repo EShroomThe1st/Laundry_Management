@@ -22,7 +22,7 @@ const PrivateRoute = ({
         case "Admin":
           return <Navigate to="/admin/users" />;
         case "Staff":
-          return <Navigate to="/staff/laundry" />;
+          return <Navigate to="/staff/order" />;
         default:
           return <Navigate to="/" />;
       }

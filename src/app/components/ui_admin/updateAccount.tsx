@@ -1,16 +1,13 @@
-import { EditOutlined } from '@ant-design/icons'
-import { IconButton } from '../button/buttons'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CustomFormModal } from '../modal/modal'
 import { Col, Form, Row, notification } from 'antd'
-import { FormInput, FormRadioGroup, SwitchInput } from '../input/inputs'
+import { FormInput, FormRadioGroup } from '../input/inputs'
 import { roleOptions } from '~/constants/testData'
-import { User } from '~/app/models/user'
 import { DefaultForm } from '../form/form'
 import { updateAccount } from '~/app/utils/api'
 
-export default function UpdateAccount({record, onUpdateUser} : {record : any, onUpdateUser : any}) {
-  const [open, setOpen] = useState(false)
+export default function UpdateAccount({isOpen, record, onUpdateUser} : {isOpen: boolean, record : any, onUpdateUser : any}) {
+  const [open, setOpen] = useState(isOpen)
   const [form] = Form.useForm()
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,20 +40,10 @@ export default function UpdateAccount({record, onUpdateUser} : {record : any, on
       setIsLoading(false)
     }
   }
-
-  const handleIconClick = (record : User) => {
-    console.log('User:', record);
-    setOpen(true);
-  };
-
   
 
   return (
     <>
-      <IconButton
-        icon={<EditOutlined />}
-        onClick={() => handleIconClick(record)}
-      />
       <CustomFormModal
         open={open}
         title='Update Account'
@@ -159,17 +146,6 @@ export default function UpdateAccount({record, onUpdateUser} : {record : any, on
             </Form.Item>
           </Col>
         </Row>
-        <Form.Item
-              name='is_active'
-              label='Active'
-              rules={[
-                {
-                  required: true
-                }
-              ]}
-            >
-              <SwitchInput />
-        </Form.Item>
         </DefaultForm>
       </CustomFormModal>
     </>

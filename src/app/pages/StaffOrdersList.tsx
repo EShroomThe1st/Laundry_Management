@@ -1,86 +1,123 @@
-// import { useState, useEffect } from 'react'
-// import { Table, TableProps } from 'antd'
-// import { getAllUser } from '../utils/api'
-// import { User } from '../models/user'
-// import CreateNewAccount from '../components/ui_admin/creatNewAccount'
-// import UpdateAccount from '../components/ui_admin/updateAccount'
-// import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons'
+import { Key, useEffect, useState } from "react";
+import { getAllOrder } from "../utils/api";
+import { Table, TableProps } from "antd";
+import { formatCurrency, paymentColor, statusColor } from "../utils/generators";
+import { Order } from "../models/order";
+import { CustomDropdown, CustomDropdownProps } from "../components/ui_staff/dropDown";
 
-// export default function AdminUsersList() {
-//   const [users, setUsers] = useState<User[]>([])
+export default function StaffOrderList(){
+  const [order, setOrder] = useState<Order[]>([]);
 
-//   const getUsersData = async () => {
-//     try {
-//       const response = await getAllUser()
-//       if (response.success) {
-//         setUsers(response.data)
-//       } else {
-//         console.error('Error fetching users data:', response)
-//       }
-//     } catch (error) {
-//       console.error('Error fetching users data:', error)
-//     }
-//   }
+  const getAllOrderData = async () => {
+    try {
+      const response = await getAllOrder()
+      if(response.success){
+        setOrder(response.data);
+      } else {
+        console.error('Error fetching order data:', response)
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-//   useEffect(() => {
-//     getUsersData()  const { role } = useAppSelector((state) => state.auth.currentUser);
+  useEffect(() => {
+    getAllOrderData();
+  }, []);
 
+  const updateOrderAfter = () => {
+    getAllOrderData();
+  }
 
-//   const columns: TableProps<User>['columns'] = [
-//     {
-//       title: 'Name',
-//       dataIndex: 'name',
-//       key: 'name',
-//       render: (_, record) => `${record.first_name} ${record.middle_name || ''} ${record.last_name}`
-//     },
-//     {
-//       title: 'Email',
-//       dataIndex: 'email',
-//       key: 'email'
-//     },
-//     {
-//       title: 'Phone Number',
-//       dataIndex: 'phone_number',
-//       key: 'phone_number'
-//     },
-//     {
-//       title: 'Address',
-//       dataIndex: 'address',
-//       key: 'address'
-//     },
-//     {
-//       title: 'Role',
-//       dataIndex: 'role_id',
-//       key: 'role_id'
-//     },
-//     {
-//       title: 'Status',
-//       dataIndex: 'is_active',
-//       key: 'is_active',
-//       render: (isActive: boolean) =>
-//         isActive ? (
-//           <CheckCircleFilled style={{ color: '#0FB900', fontSize: '2rem' }} />
-//         ) : (
-//           <CloseCircleFilled style={{ color: '#DB0000', fontSize: '2rem' }} />
-//         )
-//     },
-//     {
-//       title: 'Actions',
-//       key: 'actions',
-//       render: (_, record) => (
-//         <>
-//           <UpdateAccount record={record} />
-//         </>
-//       )
-//     }
-//   ]
+  const dropdownItems: CustomDropdownProps["items"] = [
+    {
+      key: "order",
+      label: "View Order Detail"
+    },
+    {
+      key: "user",
+      label: "View User Detail"
+    },
+    {
+      key: "update",
+      label: "Update Order",
+    },
+    {
+      key: "cancel",
+      label: "Cancel Order",
+      danger: true
+    },
+  ];
 
-//   return (
-//     <>
-//       <div className='w-full flex justify-end'>
-//         <CreateNewAccount />
-//       </div>
-//       <Table columns={columns} dataSource={users} pagination={{ position: ['bottomCenter'] }} />
-//     </>
-//   )
-// }
+  const checkDisabled = (
+    key: Key | undefined,
+    record: Order,
+  ): boolean => {
+    const { order_status } = record;
+    switch (key) {
+      case "cancel":
+        return order_status === "Canceled" || order_status === "Finished" ||order_status === "Ended";
+      case "update":
+        return order_status === "Canceled" || order_status === "Finished" ||order_status === "Ended";
+      default:
+        return false;
+    }
+  };
+
+  const columns: TableProps<Order>['columns'] = [
+    {
+      title: 'Service Type',
+      dataIndex: ['service', 'service_name'],
+      key: 'service_name',
+    },
+    {
+      title: 'Price',
+      dataIndex: 'order_price',
+      key: 'order_price',
+      render: (order_price) => formatCurrency(order_price)
+    },
+    {
+      title: 'Customer',
+      dataIndex: ['user', 'full_name'],
+      key: 'order_price',
+      render: (order_price) => formatCurrency(order_price)
+    },
+    {
+      title: 'Payment',
+      align: "center",
+      dataIndex: 'payment_status',
+      key: 'payment_status',
+      render: (payment_status) => (
+        <span style={{ color: paymentColor(payment_status), fontWeight:"bold" }}>{payment_status}</span>
+      )
+    },
+    {
+      title: 'Status',
+      align: "center",
+      dataIndex: 'order_status',
+      key: 'order_status',
+      render: (order_status) => (
+        <span style={{ color: statusColor(order_status), fontWeight:"bold" }}>{order_status}</span>
+      )
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      align: 'center',
+      render: (_, record) => (
+        <>
+          <CustomDropdown items={dropdownItems} checkDisabled={checkDisabled} record={record} updateOrderAfter={updateOrderAfter}/>
+        </>
+      )
+    }
+  ]
+
+  return(
+    <>
+    {/* <div className='w-full flex justify-end'>
+    <CreateLaundryModal onUpdateLaundryPacks={updateLaundryPacks} />
+    </div> */}
+    <Table columns={columns} dataSource={order} pagination={{ position: ['bottomCenter'] }} />
+    </>
+  );
+}

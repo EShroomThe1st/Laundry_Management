@@ -68,3 +68,26 @@ export const role: Role[] = [
     role_name: 'Staff'
   },
 ]
+
+export const orderStatusOptions = [
+  {
+    value: 'Processing',
+    label: 'Processing'
+  },
+  {
+    value: 'Received',
+    label: 'Received'
+  },
+  {
+    value: 'Washing',
+    label: 'Washing'
+  },
+  {
+    value: 'Finished',
+    label: 'Finished'
+  },
+  {
+    value: 'Ended',
+    label: 'Ended'
+  },
+]

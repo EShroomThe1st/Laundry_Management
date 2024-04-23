@@ -4,7 +4,7 @@ import 'nprogress/nprogress.css'
 import { Envs } from './env'
 import { CreateLaundry } from '../models/laundry'
 import { CreateUser, User } from '../models/user'
-import { CreateServiceType } from '../models/service'
+import { CreateService, CreateServiceType } from '../models/service'
 
 const baseURL = Envs.apiLocal
 
@@ -46,15 +46,51 @@ const getAllServiceType = async () => {
 
 const getAllService = async (data: object) => {
   try {
-    NProgress.start();
-    const response = await axios.get(`${baseURL}/laundry/service-type`, data );
-    NProgress.done();
-    return response.data;
+    NProgress.start()
+    const response = await axios.post(`${baseURL}/laundry/service-type`, data)
+    NProgress.done()
+    return response.data
   } catch (error) {
-    console.error('Error fetching service data:', error);
-    throw error;
+    console.error('Error fetching service data:', error)
+    throw error
   }
-};
+}
+
+const getAllOrder = async () => {
+  try {
+    NProgress.start()
+    const response = await axios.get(`${baseURL}/order/all-orders`)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    throw error
+  }
+}
+
+const getOrderById = async (data: object) => {
+  try {
+    NProgress.start()
+    const response = await axios.post(`${baseURL}/order`, data)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    throw error
+  }
+}
+
+const getUserById = async (data: object) => {
+  try {
+    NProgress.start()
+    const response = await axios.post(`${baseURL}/user/account`, data)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    throw error
+  }
+}
 
 const createLaundryPack = async (data: CreateLaundry) => {
   try {
@@ -74,9 +110,9 @@ const createNewAccount = async (data: CreateUser) => {
     const token = localStorage.getItem('token')
     const response = await axios.post(`${baseURL}/user/new-account-admin`, data, {
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        Authorization: `Bearer ${token}`
+      }
+    })
     NProgress.done()
     return response.data
   } catch (error) {
@@ -97,6 +133,18 @@ const createNewServiceType = async (data: CreateServiceType) => {
   }
 }
 
+const createNewService = async (data: CreateService) => {
+  try {
+    NProgress.start()
+    const response = await axios.post(`${baseURL}/laundry/new-laundry-service`, data)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error creating new service:', error)
+    throw error
+  }
+}
+
 const updateAccount = async (data: User) => {
   try {
     NProgress.start()
@@ -105,6 +153,30 @@ const updateAccount = async (data: User) => {
     return response.data
   } catch (error) {
     console.error('Error updating account:', error)
+    throw error
+  }
+}
+
+const updateOrder = async (data: object) => {
+  try {
+    NProgress.start()
+    const response = await axios.patch(`${baseURL}/order`, data)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error updating order:', error)
+    throw error
+  }
+}
+
+const disabledAccount = async (data: object) => {
+  try {
+    NProgress.start()
+    const response = await axios.post(`${baseURL}/user/account-disabled`, data)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error disabling account:', error)
     throw error
   }
 }
@@ -133,15 +205,34 @@ const deleteServiceType = async (data: Object) => {
   }
 }
 
+const cancelOrder = async (data: object) => {
+  try {
+    NProgress.start()
+    const response = await axios.delete(`${baseURL}/order`, { data })
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error canceling order:', error)
+    throw error
+  }
+}
+
 export {
   getAllUser,
   getAllLaundryPack,
-  createLaundryPack,
-  deleteLaundryPack,
-  createNewAccount,
+  getAllService,
+  getAllOrder,
   getAllServiceType,
+  getOrderById,
+  getUserById,
+  createLaundryPack,
   createNewServiceType,
-  deleteServiceType,
+  createNewService,
+  createNewAccount,
   updateAccount,
-  getAllService
+  updateOrder,
+  deleteServiceType,
+  deleteLaundryPack,
+  disabledAccount,
+  cancelOrder
 }
