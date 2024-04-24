@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { CustomFormModal } from '../modal/modal'
 import { Col, Form, Row, notification } from 'antd'
 import { FormInput, FormRadioGroup } from '../input/inputs'
