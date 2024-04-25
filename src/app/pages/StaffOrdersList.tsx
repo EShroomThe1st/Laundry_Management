@@ -62,7 +62,7 @@ export default function StaffOrderList(){
       case "cancel":
         return order_status === "Canceled" || order_status === "Finished" ||order_status === "Ended";
       case "update":
-        return order_status === "Canceled" || order_status === "Finished" || order_status === "Ended";
+        return order_status === "Canceled" || order_status === "Ended" || (payment_status === "Not Yet" && order_status === "Finished");
       case "payment":
         return order_status === "Canceled" || payment_status === "Paid" || order_status === "Ended" ||  order_status === "Processing" || order_status === "Received" || order_status === "Washing";
       default:
