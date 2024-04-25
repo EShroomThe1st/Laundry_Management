@@ -43,22 +43,28 @@ export default function StaffOrderList(){
       label: "Update Order",
     },
     {
-      key: "cancel",
-      label: "Cancel Order",
-      danger: true
+      key: "payment",
+      label: "Update Payment",
     },
+    // {
+    //   key: "cancel",
+    //   label: "Cancel Order",
+    //   danger: true
+    // },
   ];
 
   const checkDisabled = (
     key: Key | undefined,
     record: Order,
   ): boolean => {
-    const { order_status } = record;
+    const { order_status, payment_status } = record;
     switch (key) {
       case "cancel":
         return order_status === "Canceled" || order_status === "Finished" ||order_status === "Ended";
       case "update":
-        return order_status === "Canceled" || order_status === "Finished" ||order_status === "Ended";
+        return order_status === "Canceled" || order_status === "Finished" || order_status === "Ended";
+      case "payment":
+        return order_status === "Canceled" || payment_status === "Paid" || order_status === "Ended" ||  order_status === "Processing" || order_status === "Received" || order_status === "Washing";
       default:
         return false;
     }

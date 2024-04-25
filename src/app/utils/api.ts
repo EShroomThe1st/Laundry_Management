@@ -169,6 +169,18 @@ const updateOrder = async (data: object) => {
   }
 }
 
+const updatePayment = async (data: object) => {
+  try {
+    NProgress.start()
+    const response = await axios.post(`${baseURL}/order/order_payment`, data)
+    NProgress.done()
+    return response.data
+  } catch (error) {
+    console.error('Error updating payment:', error)
+    throw error
+  }
+}
+
 const disabledAccount = async (data: object) => {
   try {
     NProgress.start()
@@ -231,6 +243,7 @@ export {
   createNewAccount,
   updateAccount,
   updateOrder,
+  updatePayment,
   deleteServiceType,
   deleteLaundryPack,
   disabledAccount,

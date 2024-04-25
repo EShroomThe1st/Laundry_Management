@@ -3,7 +3,10 @@ import { Dropdown, MenuProps, Modal, Table, TableProps, Typography, notification
 import { Key } from 'react'
 import { Order, OrderDetail } from '~/app/models/order'
 import Icon from '../../../assets/User.png'
-import { cancelOrder, getOrderById, getUserById, updateOrder } from '~/app/utils/api'
+import { 
+  // cancelOrder,
+   getOrderById, getUserById, updateOrder, 
+   updatePayment} from '~/app/utils/api'
 import { formatCurrency, formatUnixToLocal, statusColor, statusNext } from '~/app/utils/generators'
 
 export type CustomDropdownProps = {
@@ -31,41 +34,71 @@ export function CustomDropdown({ items, record, updateOrderAfter, checkDisabled 
       const response = await updateOrder(values)
       console.log('Update order:', response)
       notification.success({
-        message: 'Order updated successfully',
-        description: 'The order has been updated.',
+        message: 'Order status updated successfully',
+        description: 'The order status has been updated.',
         type: 'success'
       })
       updateOrderAfter()
     } catch (error) {
       notification.error({
-        message: 'Order updated unsuccessfully',
+        message: 'Order status updated unsuccessfully',
         description: `${error}`,
         type: 'error'
       })
-      console.error('Error updating account:', error)
+      console.error('Error updating order:', error)
     }
   }
 
-  const handleCancel = async () => {
+  const handlePaymentUpdate = async (values: any) => {
     try {
-      const body = { order_id: record.order_id }
-      const response = await cancelOrder(body)
-      console.log('Cancel Order:', response)
+      const response = await updatePayment(values)
+      console.log('Update payment:', response)
       notification.success({
-        message: 'Order canceled successfully',
-        description: 'The order has been canceled.',
+        message: 'Order payment updated successfully',
+        description: 'The order payment has been updated.',
         type: 'success'
       })
       updateOrderAfter()
-    } catch (error) {
-      notification.error({
-        message: 'Order updated canceled',
-        description: `${error}`,
-        type: 'error'
-      })
-      console.error('Error canceled account:', error)
+    } catch (error : any) {
+
+      if (error.response && error.response.status === 400) {
+        notification.error({
+          message: 'Order payment updated unsuccessfully',
+          description: `Order has not been completed`,
+          type: 'error'
+        })
+      } else {
+        notification.error({
+          message: 'Order payment updated unsuccessfully',
+          description: `${error}`,
+          type: 'error'
+        })
+      }
+      console.error('Error updating order payment:', error)
     }
   }
+  
+
+  // const handleCancel = async () => {
+  //   try {
+  //     const body = { order_id: record.order_id }
+  //     const response = await cancelOrder(body)
+  //     console.log('Cancel Order:', response)
+  //     notification.success({
+  //       message: 'Order canceled successfully',
+  //       description: 'The order has been canceled.',
+  //       type: 'success'
+  //     })
+  //     updateOrderAfter()
+  //   } catch (error) {
+  //     notification.error({
+  //       message: 'Order updated canceled',
+  //       description: `${error}`,
+  //       type: 'error'
+  //     })
+  //     console.error('Error canceled account:', error)
+  //   }
+  // }
 
   const columns: TableProps['columns'] = [
     {
@@ -190,26 +223,41 @@ export function CustomDropdown({ items, record, updateOrderAfter, checkDisabled 
         })
         break
       }
-      case 'cancel': {
+      case 'payment': {
         modal.confirm({
-          title: 'Are you sure',
+          title: 'Update Status',
           icon: <ExclamationCircleFilled />,
-          content: (
-            <div>
-              Do you want to cancel {record.service.service_name} of {record.user.full_name}
-            </div>
-          ),
+          content: <>Do you want to change payment status to <span className='text-[#0FB900] font-bold'>Paid</span>?</>,
           okText: 'Confirm',
-          okType: 'danger',
+          okType: 'primary',
           cancelText: 'Cancel',
           onOk() {
-            console.log(`${key}: ${record.order_id}`)
-            handleCancel()
+            handlePaymentUpdate({ order_id: record.order_id })
           },
           onCancel() {}
         })
         break
       }
+      // case 'cancel': {
+      //   modal.confirm({
+      //     title: 'Are you sure',
+      //     icon: <ExclamationCircleFilled />,
+      //     content: (
+      //       <div>
+      //         Do you want to cancel {record.service.service_name} of {record.user.full_name}
+      //       </div>
+      //     ),
+      //     okText: 'Confirm',
+      //     okType: 'danger',
+      //     cancelText: 'Cancel',
+      //     onOk() {
+      //       console.log(`${key}: ${record.order_id}`)
+      //       handleCancel()
+      //     },
+      //     onCancel() {}
+      //   })
+      //   break
+      // }
       default:
         break
     }
